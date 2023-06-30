@@ -1,0 +1,23 @@
+from dataclasses import dataclass
+
+@dataclass
+class Task:
+    title: str
+    description: str
+    due_date: str
+    completed: bool = False
+
+    def update_title(self, title: str) -> None:
+        self.title = title
+
+    def update_description(self, description: str) -> None:
+        self.description = description
+
+    def update_due_date(self, due_date: str) -> None:
+        self.due_date = due_date
+
+    def mark_as_completed(self) -> None:
+        self.completed = True
+
+    def mark_as_not_completed(self) -> None:
+        self.completed = False

@@ -1,0 +1,72 @@
+from task_manager import TaskManager
+
+class CLI:
+    def __init__(self):
+        self.task_manager = TaskManager()
+
+    def display_menu(self) -> None:
+        print("1. Create Task")
+        print("2. View All Tasks")
+        print("3. Update Task")
+        print("4. Delete Task")
+        print("5. Filter Tasks by Completion")
+        print("6. Sort Tasks by Due Date")
+        print("7. Exit")
+
+    def get_user_input(self, prompt: str) -> str:
+        return input(prompt)
+
+    def execute_command(self, command: str) -> None:
+        if command == "1":
+            title = self.get_user_input("Enter task title: ")
+            description = self.get_user_input("Enter task description: ")
+            due_date = self.get_user_input("Enter task due date: ")
+            self.task_manager.create_task(title, description, due_date)
+            print("Task created successfully!")
+        elif command == "2":
+            tasks = self.task_manager.get_all_tasks()
+            for task in tasks:
+                print(f"Title: {task.title}")
+                print(f"Description: {task.description}")
+                print(f"Due Date: {task.due_date}")
+                print(f"Completed: {'Yes' if task.completed else 'No'}")
+                print()
+        elif command == "3":
+            task_id = int(self.get_user_input("Enter task ID: "))
+            title = self.get_user_input("Enter updated task title (leave blank to skip): ")
+            description = self.get_user_input("Enter updated task description (leave blank to skip): ")
+            due_date = self.get_user_input("Enter updated task due date (leave blank to skip): ")
+            self.task_manager.update_task(task_id, title, description, due_date)
+            print("Task updated successfully!")
+        elif command == "4":
+            task_id = int(self.get_user_input("Enter task ID: "))
+            self.task_manager.delete_task(task_id)
+            print("Task deleted successfully!")
+        elif command == "5":
+            completed = self.get_user_input("Filter tasks by completion (True/False): ").lower() == "true"
+            tasks = self.task_manager.filter_tasks_by_completion(completed)
+            for task in tasks:
+                print(f"Title: {task.title}")
+                print(f"Description: {task.description}")
+                print(f"Due Date: {task.due_date}")
+                print(f"Completed: {'Yes' if task.completed else 'No'}")
+                print()
+        elif command == "6":
+            tasks = self.task_manager.sort_tasks_by_due_date()
+            for task in tasks:
+                print(f"Title: {task.title}")
+                print(f"Description: {task.description}")
+                print(f"Due Date: {task.due_date}")
+                print(f"Completed: {'Yes' if task.completed else 'No'}")
+                print()
+        elif command == "7":
+            exit()
+        else:
+            print("Invalid command!")
+
+if __name__ == "__main__":
+    cli = CLI()
+    while True:
+        cli.display_menu()
+        command = cli.get_user_input("Enter command: ")
+        cli.execute_command(command)

@@ -1,0 +1,11 @@
+from cli import CLI
+
+def main():
+    cli = CLI()
+    while True:
+        cli.display_menu()
+        command = cli.get_user_input("Enter command: ")
+        cli.execute_command(command)
+
+if __name__ == "__main__":
+    main()

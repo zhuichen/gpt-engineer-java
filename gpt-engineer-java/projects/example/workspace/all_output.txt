@@ -1,0 +1,183 @@
+Certainly! Here is the updated code with the necessary fixes:
+
+1. `user.py`:
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class User:
+    username: str
+    password: str
+
+    def register(self, username: str, password: str) -> None:
+        self.username = username
+        self.password = password
+
+    def login(self, username: str, password: str) -> bool:
+        return self.username == username and self.password == password
+
+    def logout(self) -> None:
+        self.username = ""
+        self.password = ""
+```
+
+2. `task.py`:
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class Task:
+    title: str
+    description: str
+    due_date: str
+    completed: bool = False
+
+    def update_title(self, title: str) -> None:
+        self.title = title
+
+    def update_description(self, description: str) -> None:
+        self.description = description
+
+    def update_due_date(self, due_date: str) -> None:
+        self.due_date = due_date
+
+    def mark_as_completed(self) -> None:
+        self.completed = True
+
+    def mark_as_not_completed(self) -> None:
+        self.completed = False
+```
+
+3. `task_manager.py`:
+
+```python
+from typing import List
+
+from task import Task
+
+class TaskManager:
+    def __init__(self):
+        self.tasks: List[Task] = []
+
+    def create_task(self, title: str, description: str, due_date: str) -> None:
+        task = Task(title, description, due_date)
+        self.tasks.append(task)
+
+    def get_all_tasks(self) -> List[Task]:
+        return self.tasks
+
+    def update_task(self, task_id: int, title: str = None, description: str = None, due_date: str = None) -> None:
+        task = self.tasks[task_id - 1]
+        if title:
+            task.update_title(title)
+        if description:
+            task.update_description(description)
+        if due_date:
+            task.update_due_date(due_date)
+
+    def delete_task(self, task_id: int) -> None:
+        del self.tasks[task_id - 1]
+
+    def filter_tasks_by_completion(self, completed: bool) -> List[Task]:
+        return [task for task in self.tasks if task.completed == completed]
+
+    def sort_tasks_by_due_date(self) -> List[Task]:
+        return sorted(self.tasks, key=lambda task: task.due_date)
+```
+
+4. `cli.py`:
+
+```python
+from task_manager import TaskManager
+
+class CLI:
+    def __init__(self):
+        self.task_manager = TaskManager()
+
+    def display_menu(self) -> None:
+        print("1. Create Task")
+        print("2. View All Tasks")
+        print("3. Update Task")
+        print("4. Delete Task")
+        print("5. Filter Tasks by Completion")
+        print("6. Sort Tasks by Due Date")
+        print("7. Exit")
+
+    def get_user_input(self, prompt: str) -> str:
+        return input(prompt)
+
+    def execute_command(self, command: str) -> None:
+        if command == "1":
+            title = self.get_user_input("Enter task title: ")
+            description = self.get_user_input("Enter task description: ")
+            due_date = self.get_user_input("Enter task due date: ")
+            self.task_manager.create_task(title, description, due_date)
+            print("Task created successfully!")
+        elif command == "2":
+            tasks = self.task_manager.get_all_tasks()
+            for task in tasks:
+                print(f"Title: {task.title}")
+                print(f"Description: {task.description}")
+                print(f"Due Date: {task.due_date}")
+                print(f"Completed: {'Yes' if task.completed else 'No'}")
+                print()
+        elif command == "3":
+            task_id = int(self.get_user_input("Enter task ID: "))
+            title = self.get_user_input("Enter updated task title (leave blank to skip): ")
+            description = self.get_user_input("Enter updated task description (leave blank to skip): ")
+            due_date = self.get_user_input("Enter updated task due date (leave blank to skip): ")
+            self.task_manager.update_task(task_id, title, description, due_date)
+            print("Task updated successfully!")
+        elif command == "4":
+            task_id = int(self.get_user_input("Enter task ID: "))
+            self.task_manager.delete_task(task_id)
+            print("Task deleted successfully!")
+        elif command == "5":
+            completed = self.get_user_input("Filter tasks by completion (True/False): ").lower() == "true"
+            tasks = self.task_manager.filter_tasks_by_completion(completed)
+            for task in tasks:
+                print(f"Title: {task.title}")
+                print(f"Description: {task.description}")
+                print(f"Due Date: {task.due_date}")
+                print(f"Completed: {'Yes' if task.completed else 'No'}")
+                print()
+        elif command == "6":
+            tasks = self.task_manager.sort_tasks_by_due_date()
+            for task in tasks:
+                print(f"Title: {task.title}")
+                print(f"Description: {task.description}")
+                print(f"Due Date: {task.due_date}")
+                print(f"Completed: {'Yes' if task.completed else 'No'}")
+                print()
+        elif command == "7":
+            exit()
+        else:
+            print("Invalid command!")
+
+if __name__ == "__main__":
+    cli = CLI()
+    while True:
+        cli.display_menu()
+        command = cli.get_user_input("Enter command: ")
+        cli.execute_command(command)
+```
+
+5. `main.py`:
+
+```python
+from cli import CLI
+
+def main():
+    cli = CLI()
+    while True:
+        cli.display_menu()
+        command = cli.get_user_input("Enter command: ")
+        cli.execute_command(command)
+
+if __name__ == "__main__":
+    main()
+```
+
+The code has been fixed and should now work as expected.

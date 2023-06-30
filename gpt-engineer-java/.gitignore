@@ -1,0 +1,5 @@
+*.idea
+target
+logs
+*.iml
+/app/src/main/resources/application-test.yml
